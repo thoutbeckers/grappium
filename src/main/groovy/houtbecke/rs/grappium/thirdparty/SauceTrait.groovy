@@ -5,6 +5,7 @@ import com.saucelabs.common.SauceOnDemandSessionIdProvider
 import com.saucelabs.junit.SauceOnDemandTestWatcher
 import com.saucelabs.saucerest.SauceREST
 import groovy.transform.SelfType
+import groovyx.net.http.HTTPBuilder
 import houtbecke.rs.grappium.AppiumTest
 import houtbecke.rs.grappium.Platforms
 import org.junit.Before
@@ -59,15 +60,29 @@ trait SauceTrait implements Platforms, SauceOnDemandSessionIdProvider {
 
     static String uploadFileOrReturnFileName(String user, String key, File appPath, String appName) {
 
-        SauceREST rest = new SauceREST(user, key);
-
         String md5 = MessageDigest.getInstance('MD5').digest(appPath.bytes).encodeHex().toString()
-
         String name = "grappium_${md5}.apk"
 
-        def returnedMd5 = rest.uploadFile(appPath, name, false);
-        if (returnedMd5 != md5)
-            throw new Exception("Uploaded file's md5 ($md5) is not what the server says it is ($returnedMd5)")
+        def remote = new HTTPBuilder("https://saucelabs.com/rest/v1/storage/")
+        remote.auth.basic(user, key)
+
+        boolean found=false
+
+        remote.get(path:user) { resp, json ->
+             json?.files?.each {
+                 if (it.name == name && it.md5 == md5) {
+                     found = true
+                     println "using cached version in SauceLabs"
+                 }
+            }
+        }
+
+        if (!found) {
+            SauceREST rest = new SauceREST(user, key);
+            def returnedMd5 = rest.uploadFile(appPath, name, false);
+            if (returnedMd5 != md5)
+                throw new Exception("Uploaded file's md5 ($md5) is not what the server says it is ($returnedMd5)")
+        }
         name
     }
 
