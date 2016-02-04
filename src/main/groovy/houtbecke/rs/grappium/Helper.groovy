@@ -38,7 +38,7 @@ interface Helper {
      */
     boolean waitInvisible(By locator)
 
-    WebElement string(String value)
+    WebElement contains(String value)
     /**
      * Return an element that contains name or text *
      */
@@ -73,5 +73,7 @@ interface Helper {
     By for_find(String value)
 
     By for_element_with_attribute_and_value(String element, String attribute, String value)
+
+    void tap(Map args)
 
 }

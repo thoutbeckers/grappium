@@ -5,6 +5,7 @@ import groovy.transform.TypeChecked
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileElement
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
@@ -93,7 +94,7 @@ abstract class AbstractHelper implements Helper {
     }
 
 
-    WebElement string(String value) {
+    WebElement contains(String value) {
         element(for_find(value));
     }
 
@@ -152,7 +153,17 @@ abstract class AbstractHelper implements Helper {
         )
     }
 
+    @Override
+    void tap(Map args) {
 
+        // help IDEs with named parameters
+        args.tapCount
+        args.touchCount
+        args.duration
+        args.x
+        args.y
 
+        ((JavascriptExecutor)driver).executeScript("mobile: tap", args)
+    }
 
 }
