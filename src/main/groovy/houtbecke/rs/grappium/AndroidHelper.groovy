@@ -53,9 +53,18 @@ class AndroidHelper extends AbstractHelper {
 
     @Override
     By for_find(String value) {
-        return By.xpath("//*[@content-desc=\"" + value + "\" or @resource-id=\"" + value +
-                "\" or @text=\"" + value + "\"] | //*[contains(translate(@content-desc,\"" + value +
-                "\",\"" + value + "\"), \"" + value + "\") or contains(translate(@text,\"" + value +
-                "\",\"" + value + "\"), \"" + value + "\") or @resource-id=\"" + value + "\"]");
+        return By.xpath(
+        """
+            //*[@content-desc="$value" or @resource-id="$value" or @text="$value"] |
+            //*[contains(translate(@content-desc,"$value", "$value"), "$value")
+                or contains(translate(@text,"$value","$value"), "$value") or @resource-id="$value"]
+        """);
     }
+
+
+    WebElement passwordField() {
+        element(for_element_with_attribute_and_value("android.widget.EditText", "password", "true"))
+    }
+
+    // //android.widget.EditText[@password='true']
 }

@@ -92,8 +92,8 @@ abstract class AbstractHelper implements Helper {
         driverWait.until(ExpectedConditions.invisibilityOfElementLocated(locator))
     }
 
-    @Override
-    WebElement find(String value) {
+
+    WebElement string(String value) {
         element(for_find(value));
     }
 
@@ -144,5 +144,15 @@ abstract class AbstractHelper implements Helper {
     WebElement name(String text) {
         element(By.name(text))
     }
+
+    @Override
+    By for_element_with_attribute_and_value(String element, String attribute, String value) {
+        return By.xpath(
+                "//$element[@$attribute='$value']"
+        )
+    }
+
+
+
 
 }

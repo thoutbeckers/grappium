@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.TestName
+import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 
 import java.util.concurrent.TimeUnit;
@@ -138,6 +139,7 @@ public class AppiumTest implements Platforms, SauceTrait {
 
             driver = new AndroidDriver(serverAddress, capabilities)
             helper = new AndroidHelper(driver, 30)
+
         }
         iOS {
             driver = new IOSDriver(serverAddress, capabilities)
@@ -159,6 +161,24 @@ public class AppiumTest implements Platforms, SauceTrait {
     @After
     public void tearDownDriver() throws Exception {
         driver?.quit()
+    }
+
+    public void context(String partialMatchForContext, Closure closure) {
+        if (driver == null)
+            return
+        final String currentContext = driver?.getContext()
+        try {
+            for (String context : driver?.getContextHandles()) {
+                if (context.toLowerCase().contains(partialMatchForContext.toLowerCase())) {
+                    driver.context(context)
+                    break
+                }
+            }
+
+            closure.run()
+        } finally {
+            driver.context currentContext;
+        }
     }
 
 }
