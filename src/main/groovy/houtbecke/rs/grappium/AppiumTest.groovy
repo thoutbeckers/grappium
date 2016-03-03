@@ -14,7 +14,7 @@ import org.openqa.selenium.remote.DesiredCapabilities
 
 import java.util.concurrent.TimeUnit;
 
-public class AppiumTest implements Platforms, SauceTrait {
+public class AppiumTest implements Platforms{
 
     AbstractHelper helper;
     AppiumDriver driver;
@@ -81,9 +81,13 @@ public class AppiumTest implements Platforms, SauceTrait {
     }
 
 
+    void beforeSetUpAppium() {}
+
     /** Run before each test **/
     @Before
     void setUpAppium() throws Exception {
+
+        beforeSetUpAppium()
 
         capabilities.metaClass.setCapabilityIfNotSet << { String key, fallbackValue='' ->
 
