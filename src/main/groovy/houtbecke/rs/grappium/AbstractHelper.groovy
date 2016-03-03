@@ -2,6 +2,7 @@ package houtbecke.rs.grappium
 
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
+import groovy.transform.TypeCheckingMode
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileElement
 import org.openqa.selenium.By
@@ -33,8 +34,12 @@ abstract class AbstractHelper implements Helper {
      * Return an element by locator *
      */
     @Override
+    @TypeChecked(TypeCheckingMode.SKIP)
     WebElement element(By locator) {
-        driver.findElement(locator)
+        WebElement we = driver.findElement(locator)
+        if (locator instanceof By.ByXPath)
+            we.metaClass.xpath = ((By.ByXPath)locator).xpathExpression
+        we
     }
 
     /**

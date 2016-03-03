@@ -1,0 +1,3 @@
+moduleName = grappium-module
+moduleVersion = 1.0
+extensionClasses = houtbecke.rs.grappium.extention.WebElementExtension

@@ -20,7 +20,7 @@ class AndroidHelper extends AbstractHelper {
     }
 
     enum AndroidTextWidgets {
-        TextView, CheckedTextView, Button
+        TextView, CheckedTextView, Button, EditText
     }
 
     /**
